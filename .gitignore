@@ -1,0 +1,61 @@
+# Environnement Python (le .venv partagé est dans le dossier parent ; on l'exclut ici aussi)
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+
+# Secrets
+.env
+
+# Artefacts lourds (DVC et MLflow à partir de la semaine 7)
+models/*
+!models/.gitkeep
+!models/metrics.json
+data/*
+!data/.gitkeep
+!data/sample/
+!data/exemples_incidents.csv
+# TP3 : la base de connaissances est écrite à la main, elle se versionne
+!data/base_connaissances.csv
+# TP5.2 : les questions de diagnostic, écrites à la main comme la base
+!data/questions_diagnostic.json
+mlruns/
+mlflow.db
+
+# Tickets créés par l'API : données d'exécution, jamais dans Git
+tickets/
+
+# Graphe graphify du projet (reconstruit par /graphify)
+graphify-out/
+
+# Éditeurs et système
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Tests
+.pytest_cache/
+.coverage
+htmlcov/
+
+# TP4
+.hypothesis/
+.mypy_cache/
+.ruff_cache/
+!data/jeu_or.csv
+
+# TP5
+!data/incidents_exemple.csv
+
+# TP5.1 : les 30 conversations du bilan des tickets
+!data/conversations_30.csv
+!data/jeu_evaluation.csv
+# TP5.2 : jeu de validation (réglages) et jeu indépendant (mesure finale seulement)
+!data/jeu_validation.csv
+!data/jeu_independant.csv
+!data/jeu_melanges.csv

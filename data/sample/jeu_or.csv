@@ -1,0 +1,21 @@
+text,attendu,difficulte,erreur_connue
+My VPN keeps disconnecting every 10 minutes when I work from home,reseau,,
+"I can't log in, my account is locked after too many password attempts",compte_acces,,
+Outlook stopped receiving emails since this morning,logiciel,,
+The printer on the second floor shows offline and nothing prints,materiel,,
+Our production database server is down and the whole team is blocked,panne_service,,
+I was charged twice for my subscription this month,facturation,,
+I received an email asking me to confirm my password on a strange website,securite,,
+The new software update crashes the application on startup,logiciel,,
+The Wi-Fi in the meeting room drops every few minutes,reseau,,
+The invoice for our licences shows the wrong amount,facturation,,
+My laptop is extremely slow and the fan is very loud,materiel,texte vague,
+"I cannot access the shared drive anymore, permission denied",compte_acces,vocabulaire partagé,
+The website returns a 500 error when customers try to check out,panne_service,vocabulaire partagé,
+"Excel crashed after I opened the invoice attachment, then the antivirus found a virus in it",securite,incident mêlé,
+"The printer was fixed yesterday, but the real problem is that I cannot log in to my account",compte_acces,incident mêlé,
+"Nothing is wrong with the network, it is the keyboard that stopped working",materiel,négation,"TP5.1 : négation ; le modèle hésite (0,54) et le second avis de la base retient « network » (reseau, similarité 0,27)"
+Mon VPN ne se connecte plus depuis ce matin,reseau,autre langue,
+It does not work,logiciel,texte trop court,
+Our coffee machine leaks water on the floor,materiel,hors domaine,
+Teams calls drop after a few minutes and the screen sharing freezes,reseau,texte réel du notebook,"TP5.1 : le modèle hésite (reseau 0,49) ; la base retient l'article KB-SW-05 sur les réunions (logiciel, 0,48), défendable"

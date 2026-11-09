@@ -260,22 +260,22 @@ gantt
 
 **Critères d'acceptation (vérifiés par le relecteur)**
 
-- [ ] Aucune tâche ne dépasse 2 jours.
-- [ ] Chaque fonctionnalité du MVP a au moins une tâche, et chaque tâche a un critère de fin vérifiable.
-- [ ] Le MVP est complet au plus tard en fin de semaine 3.
-- [ ] Chaque membre a saisi ses propres tâches ; l'écart de charge entre membres reste inférieur à 2 jours.
-- [ ] Les tâches existent comme issues GitHub.
+- [x] Aucune tâche ne dépasse 2 jours.
+- [x] Chaque fonctionnalité du MVP a au moins une tâche, et chaque tâche a un critère de fin vérifiable.
+- [x] Le MVP est complet au plus tard en fin de semaine 3.
+- [x] Chaque membre a saisi ses propres tâches ; l'écart de charge entre membres reste inférieur à 2 jours.
+- [x] Les tâches existent comme issues GitHub.
 
 ## Remise et décision de l'enseignant
 
 **Checklist de remise (coordinateur : Aadoud Anass)**
 
-- [ ] `docs/semaine1/README.md` avec la répartition rédacteurs et relecteurs
-- [ ] Les quatre livrables fusionnés sur la branche principale, chacun par une pull request approuvée par son relecteur
-- [ ] Échantillon de données dans `data/sample/`
-- [ ] Schéma et écrans visibles sur GitHub
-- [ ] Issues GitHub créées pour les tâches du pipeline
-- [ ] Étiquette `semaine1-remis` posée et enseignant prévenu
+- [x] `docs/semaine1/README.md` avec la répartition rédacteurs et relecteurs
+- [x] Les quatre livrables fusionnés sur la branche principale, chacun par une pull request approuvée par son relecteur
+- [x] Échantillon de données dans `data/sample/`
+- [x] Schéma et écrans visibles sur GitHub
+- [x] Issues GitHub créées pour les tâches du pipeline
+- [x] Étiquette `semaine1-remis` posée et enseignant prévenu
 
 **Décision de l'enseignant (sous 48 heures)**
 

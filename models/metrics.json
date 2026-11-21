@@ -1,0 +1,81 @@
+{
+  "version": "0.1.0",
+  "lignes": 10721,
+  "hyper": {
+    "C": 1.0,
+    "seuil": 0.5,
+    "min_df": 2
+  },
+  "par_categorie": {
+    "logiciel": 2012,
+    "reseau": 1695,
+    "securite": 1627,
+    "hors_sujet": 1485,
+    "panne_service": 1200,
+    "materiel": 1112,
+    "facturation": 897,
+    "compte_acces": 693
+  },
+  "test_20pct": {
+    "f1_macro": 0.89,
+    "exactitude": 0.892,
+    "exactitude_par_source": {
+      "clinc150": 1.0,
+      "stackexchange": 0.851,
+      "superuser": 0.901,
+      "tobi_bueck": 0.866
+    },
+    "par_classe": {
+      "compte_acces": {
+        "precision": 0.885,
+        "recall": 0.777,
+        "f1-score": 0.828,
+        "support": 139.0
+      },
+      "facturation": {
+        "precision": 0.966,
+        "recall": 0.955,
+        "f1-score": 0.961,
+        "support": 179.0
+      },
+      "hors_sujet": {
+        "precision": 0.997,
+        "recall": 1.0,
+        "f1-score": 0.998,
+        "support": 297.0
+      },
+      "logiciel": {
+        "precision": 0.811,
+        "recall": 0.861,
+        "f1-score": 0.835,
+        "support": 403.0
+      },
+      "materiel": {
+        "precision": 0.867,
+        "recall": 0.851,
+        "f1-score": 0.859,
+        "support": 222.0
+      },
+      "panne_service": {
+        "precision": 0.803,
+        "recall": 0.783,
+        "f1-score": 0.793,
+        "support": 240.0
+      },
+      "reseau": {
+        "precision": 0.885,
+        "recall": 0.926,
+        "f1-score": 0.905,
+        "support": 339.0
+      },
+      "securite": {
+        "precision": 0.958,
+        "recall": 0.92,
+        "f1-score": 0.939,
+        "support": 326.0
+      }
+    },
+    "abstention": 0.06
+  },
+  "duree_s": 141.1
+}

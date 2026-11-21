@@ -1,0 +1,292 @@
+{
+  "jeu": "validation",
+  "date": "2026-11-20T22:36:52+00:00",
+  "version": "0.1.0",
+  "empreinte_jeu": "401b6ab6451e",
+  "modele": {
+    "fichier": "support.joblib",
+    "empreinte": "9938e148dc6d",
+    "hyper": {
+      "C": 1.0,
+      "seuil": 0.5,
+      "min_df": 2
+    }
+  },
+  "lignes": 120,
+  "f1_macro": 0.917,
+  "exactitude": 0.917,
+  "top1": 0.848,
+  "top3": 0.962,
+  "abstention": 0.083,
+  "exactitude_reponses_donnees": 0.936,
+  "f1_macro_avec_abstention": 0.895,
+  "critiques": {
+    "total": 30,
+    "manques": 0
+  },
+  "hors_sujet": {
+    "total": 15,
+    "refuses": 12,
+    "taux_refus": 0.8,
+    "refus_a_tort": 0
+  },
+  "par_classe": {
+    "compte_acces": {
+      "precision": 0.875,
+      "rappel": 0.933,
+      "f1": 0.903,
+      "effectif": 15
+    },
+    "facturation": {
+      "precision": 0.938,
+      "rappel": 1.0,
+      "f1": 0.968,
+      "effectif": 15
+    },
+    "logiciel": {
+      "precision": 0.929,
+      "rappel": 0.867,
+      "f1": 0.897,
+      "effectif": 15
+    },
+    "materiel": {
+      "precision": 0.75,
+      "rappel": 1.0,
+      "f1": 0.857,
+      "effectif": 15
+    },
+    "panne_service": {
+      "precision": 1.0,
+      "rappel": 0.867,
+      "f1": 0.929,
+      "effectif": 15
+    },
+    "reseau": {
+      "precision": 1.0,
+      "rappel": 0.867,
+      "f1": 0.929,
+      "effectif": 15
+    },
+    "securite": {
+      "precision": 0.938,
+      "rappel": 1.0,
+      "f1": 0.968,
+      "effectif": 15
+    },
+    "hors_sujet": {
+      "precision": 1.0,
+      "rappel": 0.8,
+      "f1": 0.889,
+      "effectif": 15
+    }
+  },
+  "par_difficulte": {
+    "négation": {
+      "lignes": 2,
+      "exactitude": 0.5
+    },
+    "simple": {
+      "lignes": 99,
+      "exactitude": 0.97
+    },
+    "texte court": {
+      "lignes": 3,
+      "exactitude": 1.0
+    },
+    "texte vague": {
+      "lignes": 4,
+      "exactitude": 1.0
+    },
+    "vocabulaire partagé": {
+      "lignes": 12,
+      "exactitude": 0.5
+    }
+  },
+  "matrice_confusion": {
+    "etiquettes": [
+      "compte_acces",
+      "facturation",
+      "logiciel",
+      "materiel",
+      "panne_service",
+      "reseau",
+      "securite",
+      "hors_sujet"
+    ],
+    "valeurs": [
+      [
+        14,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        15,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        13,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        15,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        0,
+        0,
+        13,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        2,
+        0,
+        13,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        15,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        2,
+        0,
+        0,
+        0,
+        12
+      ]
+    ]
+  },
+  "temps_moyen_ms": 13.7,
+  "erreurs": [
+    {
+      "text": "My H: drive disappeared from File Explorer",
+      "attendu": "reseau",
+      "predit": "materiel",
+      "probable": "materiel",
+      "confiance": 0.886,
+      "raison": "",
+      "article": "KB-NET-05"
+    },
+    {
+      "text": "My mouse is fine, the real issue is that the Wi-Fi disconnects every few minutes",
+      "attendu": "reseau",
+      "predit": "materiel",
+      "probable": "materiel",
+      "confiance": 0.797,
+      "raison": "",
+      "article": "KB-HW-03"
+    },
+    {
+      "text": "I lost access to my email after changing my phone number for MFA",
+      "attendu": "compte_acces",
+      "predit": "securite",
+      "probable": "securite",
+      "confiance": 0.511,
+      "raison": "",
+      "article": "KB-SEC-06"
+    },
+    {
+      "text": "Outlook keeps asking me for my password again and again",
+      "attendu": "logiciel",
+      "predit": "INDETERMINE",
+      "probable": "compte_acces",
+      "confiance": 0.459,
+      "raison": "confiance_faible",
+      "article": "KB-SW-07"
+    },
+    {
+      "text": "In Zoom people can't hear me although my headset works in other apps",
+      "attendu": "logiciel",
+      "predit": "materiel",
+      "probable": "materiel",
+      "confiance": 0.666,
+      "raison": "",
+      "article": "KB-HW-04"
+    },
+    {
+      "text": "No one can log in this morning",
+      "attendu": "panne_service",
+      "predit": "compte_acces",
+      "probable": "compte_acces",
+      "confiance": 0.691,
+      "raison": "",
+      "article": "KB-OUT-04"
+    },
+    {
+      "text": "Customers cannot pay on our online shop",
+      "attendu": "panne_service",
+      "predit": "facturation",
+      "probable": "facturation",
+      "confiance": 0.656,
+      "raison": "",
+      "article": "KB-OUT-08"
+    },
+    {
+      "text": "The coffee machine in the kitchen is leaking",
+      "attendu": "hors_sujet",
+      "predit": "INDETERMINE",
+      "probable": "materiel",
+      "confiance": 0.462,
+      "raison": "confiance_faible",
+      "article": "KB-SEC-07"
+    },
+    {
+      "text": "My car makes a strange noise when braking",
+      "attendu": "hors_sujet",
+      "predit": "materiel",
+      "probable": "materiel",
+      "confiance": 0.549,
+      "raison": "",
+      "article": "KB-HW-02"
+    },
+    {
+      "text": "The air conditioning in meeting room B is too cold",
+      "attendu": "hors_sujet",
+      "predit": "INDETERMINE",
+      "probable": "logiciel",
+      "confiance": 0.541,
+      "raison": "hors_sujet_douteux",
+      "article": "KB-NET-02"
+    }
+  ]
+}

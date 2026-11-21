@@ -113,6 +113,22 @@ Parcours d'une conversation : solution citée (essai 1) → article suivant (ess
 python -m support_agent.bilan_tickets   # rejoue les 30 conversations de data/eval/conversations.json
 ```
 
+## Mesures
+
+```powershell
+python -m support_agent.evaluer validation             # mesure de départ, répétable -> models/eval_validation.json
+python -m support_agent.evaluer independant --final    # mesure finale : UNE seule lecture, tracée
+```
+
+| Fichier | Contenu |
+| --- | --- |
+| `models/metrics.json` | Test sur 20 % tenus à part, à l'entraînement |
+| `models/eval_validation.json` | Mesure de départ : F1 macro, top-1, top-3, abstention, cas critiques, hors sujet, par classe, par difficulté, erreurs |
+| `models/bilan_tickets.json` | Les 30 conversations : tickets créés et attendus |
+| `models/independant_lu.json` | Trace de la lecture du jeu indépendant (après T12) |
+
+Dernière mesure de départ (`jeu_validation.csv`, 120 messages) : F1 macro **0,917** · article top-1 **0,848** · top-3 **0,962** · cas critiques manqués **0/30** · hors sujet refusés 12/15 · 14 ms par message.
+
 ## Structure
 
 | Dossier | Contenu |

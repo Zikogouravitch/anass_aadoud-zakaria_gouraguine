@@ -61,12 +61,31 @@ python -m support_agent.predict --json "The printer is offline"
 
 Méthode et choix mesurés : [`docs/modele.md`](docs/modele.md).
 
+## API et interface
+
+```powershell
+uvicorn support_agent.api.main:app --port 8000    # API : http://localhost:8000/docs (modèle préchargé en ~30 s)
+streamlit run support_agent/ui/app.py             # interface : http://localhost:8501
+```
+
+| Route | Rôle |
+| --- | --- |
+| `GET /health` | État de l'API et du modèle (toujours ouverte) |
+| `POST /predict` | Classement seul d'un message : catégorie, priorité, articles |
+| `POST /chat` | Un tour de conversation : `{"message": "..."}` puis `{"conversation_id": "...", "action": "resolu" \| "non_resolu" \| "technicien" \| "annuler"}` ou une réponse libre |
+
+Si `API_KEY` est rempli dans `.env`, chaque appel (sauf `/health`) doit envoyer l'en-tête `X-API-Key`.
+
+Parcours d'une conversation : solution citée (essai 1) → article suivant (essai 2) → ticket pré-rempli proposé. Un cas critique est escaladé tout de suite ; un message vague reçoit une question de précision ; un hors sujet est refusé poliment.
+
 ## Structure
 
 | Dossier | Contenu |
 | --- | --- |
 | `support_agent/` | Cœur : configuration, données, modèle, base de connaissances, escalade |
 | `support_agent/datasets/` | Téléchargement, étiquetage et fusion des sources (Tobi-Bueck, Super User, CLINC150) |
+| `support_agent/api/` | API FastAPI (`/health`, `/predict`, `/chat`) |
+| `support_agent/ui/` | Interface Streamlit (onglet Chat) et client HTTP |
 | `data/sample/` | Jeu d'essai versionné (100 tickets, 57 articles, 20 cas du jeu d'or) |
 | `data/eval/` | Jeux d'évaluation écrits à la main : validation (120) et indépendant (126) |
 | `tests/` | Tests pytest |

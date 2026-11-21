@@ -21,8 +21,15 @@ CATEGORIES: tuple[str, ...] = (
     "reseau",
     "securite",
 )
+HORS_SUJET = "hors_sujet"
+# Étiquettes apprises par le modèle : les 7 catégories IT + le hors sujet (refus poli)
+ETIQUETTES: tuple[str, ...] = (*CATEGORIES, HORS_SUJET)
 PRIORITES: tuple[str, ...] = ("low", "medium", "high")
 INDETERMINE = "INDETERMINE"
+
+RAW = DATA / "raw"  # téléchargements (hors Git)
+PROCESSED = DATA / "processed"  # jeu d'entraînement construit (hors Git)
+EVAL = DATA / "eval"  # jeux d'évaluation écrits à la main (versionnés)
 
 
 class Settings(BaseSettings):

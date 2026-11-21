@@ -40,12 +40,23 @@ ruff check .          # style
 mypy support_agent    # types
 ```
 
+## Données
+
+```powershell
+python -m support_agent.datasets.construire   # télécharge les 3 sources et construit data/processed/entrainement.csv
+python -m support_agent.decrire               # recalcule les chiffres du jeu de données
+```
+
+Sources, licences et méthode d'étiquetage : [`docs/donnees.md`](docs/donnees.md).
+
 ## Structure
 
 | Dossier | Contenu |
 | --- | --- |
 | `support_agent/` | Cœur : configuration, données, modèle, base de connaissances, escalade |
+| `support_agent/datasets/` | Téléchargement, étiquetage et fusion des sources (Tobi-Bueck, Super User, CLINC150) |
 | `data/sample/` | Jeu d'essai versionné (100 tickets, 57 articles, 20 cas du jeu d'or) |
+| `data/eval/` | Jeux d'évaluation écrits à la main : validation (120) et indépendant (126) |
 | `tests/` | Tests pytest |
 | `docs/` | Cadrage (semaine 1) et fiches de suivi |
 

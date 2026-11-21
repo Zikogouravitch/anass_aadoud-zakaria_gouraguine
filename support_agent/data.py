@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from support_agent.config import CATEGORIES, PRIORITES, SAMPLE
+from support_agent.config import CATEGORIES, ETIQUETTES, EVAL, PRIORITES, SAMPLE
 
 COLONNES_TICKETS = ["text", "categorie", "priorite"]
 COLONNES_KB = ["id", "categorie", "titre", "symptomes", "etapes", "escalade_si", "source"]
@@ -76,3 +76,25 @@ def charger_base(chemin: Path = SAMPLE / "base_connaissances.csv") -> list[Artic
 def charger_jeu_or(chemin: Path = SAMPLE / "jeu_or.csv") -> pd.DataFrame:
     """Jeu d'or : 20 incidents courts avec la catégorie attendue."""
     return _lire(chemin, COLONNES_OR)
+
+
+COLONNES_EVAL = ["text", "attendu", "articles_ok", "critique", "difficulte"]
+JEUX_EVAL = ("validation", "independant")
+
+
+def charger_jeu_eval(nom: str, dossier: Path = EVAL) -> pd.DataFrame:
+    """Jeu d'évaluation écrit à la main : `validation` (réglage) ou `independant` (mesure finale).
+
+    `articles_ok` liste les articles acceptés (séparés par « | »), `critique` vaut 1 si
+    l'incident doit être escaladé tout de suite.
+    """
+    if nom not in JEUX_EVAL:
+        raise ValueError(f"jeu inconnu : {nom} (attendu : {JEUX_EVAL})")
+    df = _lire(dossier / f"jeu_{nom}.csv", COLONNES_EVAL)
+    inconnues = set(df["attendu"]) - set(ETIQUETTES)
+    if inconnues:
+        raise DonneesInvalides(f"étiquettes inconnues : {sorted(inconnues)}")
+    df["articles_ok"] = df["articles_ok"].fillna("")
+    df["critique"] = df["critique"].astype(int)
+    df["difficulte"] = df["difficulte"].fillna("")
+    return df

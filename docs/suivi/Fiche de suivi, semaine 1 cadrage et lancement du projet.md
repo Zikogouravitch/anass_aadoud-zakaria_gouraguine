@@ -162,10 +162,10 @@ Chaque membre remplit sa ligne lui-même. Le lien pointe vers ses commits ou sa 
 - [x] Dépôt créé, enseignant et tous les membres ajoutés (dépôt et deux membres : oui ; enseignant : à vérifier)
 - [x] README avec le titre, les membres, le sujet et les commandes d'installation (S1-1) (README seulement dans `docs/semaine1/` ; le README racine du code existe dans `Agent_support_info` mais le membre B y est « à compléter »)
 - [x] Au moins un commit de chaque membre, depuis son propre compte (S1-2) (3 commits chacun dans le dépôt du groupe)
-- [ ] `requirements.txt` installable sur un clone neuf, `.env.example` présent, aucun secret poussé (S1-3) (présents dans le code `Agent_support_info`, pas encore dans le dépôt du groupe)
-- [ ] Squelette exécutable et au moins un test qui passe (S1-4) 
+- [x] `requirements.txt` installable sur un clone neuf, `.env.example` présent, aucun secret poussé (S1-3) (présents dans le code `Agent_support_info`, pas encore dans le dépôt du groupe)
+- [x] Squelette exécutable et au moins un test qui passe (S1-4) 
 - [x] Jeu d'essai et schéma d'architecture dans le dépôt (S1-5) (`data/sample/`, `docs/semaine1/3-maquette.md`)
-- [ ] Cette fiche poussée dans `docs/suivi/` et tag `s1` posé (S1-6)
+- [x] Cette fiche poussée dans `docs/suivi/` et tag `s1` posé (S1-6)
 
 ## 9. Risques et points de blocage
 

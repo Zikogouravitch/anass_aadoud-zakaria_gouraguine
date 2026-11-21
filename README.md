@@ -32,6 +32,8 @@ uv pip compile requirements.txt --universal --python-version 3.11 --index-strate
 uv pip compile requirements-dev.txt --universal --python-version 3.11 --index-strategy unsafe-best-match --emit-index-url -o requirements-dev.lock
 ```
 
+`torch` est installé en version **CPU** (index PyTorch) : pas de CUDA, plus léger en CI et dans Docker.
+
 ## Vérifier
 
 ```powershell
@@ -48,6 +50,16 @@ python -m support_agent.decrire               # recalcule les chiffres du jeu de
 ```
 
 Sources, licences et méthode d'étiquetage : [`docs/donnees.md`](docs/donnees.md).
+
+## Modèle
+
+```powershell
+python -m support_agent.train                                   # ≈ 3 à 5 min sur CPU, écrit models/support.joblib + models/metrics.json
+python -m support_agent.predict "My VPN keeps disconnecting"    # -> reseau + KB-NET-01
+python -m support_agent.predict --json "The printer is offline"
+```
+
+Méthode et choix mesurés : [`docs/modele.md`](docs/modele.md).
 
 ## Structure
 

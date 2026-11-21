@@ -39,7 +39,7 @@ class Settings(BaseSettings):
 
     api_key: str = ""
     api_url: str = "http://localhost:8000"
-    seuil_abstention: float = 0.60
+    seuil_abstention: float = 0.50
     ollama_active: bool = False
     ollama_url: str = "http://localhost:11434"
 

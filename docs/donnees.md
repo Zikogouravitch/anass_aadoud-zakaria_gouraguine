@@ -19,7 +19,7 @@ Les textes téléchargés ne sont pas redistribués : `data/raw/` et `data/proce
 
 - **Tobi-Bueck** : anglais, type `Incident` ou `Problem`. Un tag de sécurité donne `securite`. Sinon, la file `Billing and Payments` donne `facturation` et la file `Service Outages and Maintenance` donne `panne_service`. Sinon, c'est le premier tag reconnu qui décide (Network → `reseau`, Hardware → `materiel`…). Les files commerciales et RH sont exclues.
 - **Super User / Stack Exchange** : la catégorie vient des tags (`vpn`, `printer`, `password`, `malware`…). Les tags de sécurité et de compte l'emportent. Un titre qui touche deux autres catégories est écarté, car ambigu. On garde seulement les titres en anglais, de 3 à 40 mots, qui décrivent un incident (« not working », « can't », « keeps disconnecting »…). Un mot comme « virus » ne suffit que si la phrase raconte un vécu (« my », « I »…).
-- **CLINC150** : intentions hors informatique, environ 10 exemples par intention. Les intentions proches du support (carte refusée, facture, appareil perdu) et les formules de politesse sont exclues.
+- **CLINC150** : intentions hors informatique, environ 10 exemples par intention. Sont exclus : tout le domaine banque et carte de crédit (trop proche de la facturation : « refund » et « credit card expired » partaient en hors sujet sur la validation), les intentions proches des comptes ou du matériel (appareil perdu, réglages), et les formules de politesse.
 
 ## Construction
 

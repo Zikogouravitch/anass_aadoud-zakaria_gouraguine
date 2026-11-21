@@ -17,11 +17,17 @@ URL = "https://huggingface.co/api/datasets/clinc/clinc_oos/parquet/plus/train/0.
 URL_INFO = "https://datasets-server.huggingface.co/info?dataset=clinc/clinc_oos&config=plus"
 
 EXCLUES = {
-    # proches de la facturation, des comptes ou du matériel
+    # domaines banque et carte de crédit : trop proches de la facturation (mesuré sur la
+    # validation : « refund », « credit card expired » partaient en hors sujet)
     "account_blocked", "report_lost_card", "freeze_account", "bill_balance", "card_declined",
-    "bill_due", "report_fraud", "damaged_card", "reset_settings", "pin_change",
-    "replacement_card_duration", "new_card", "pay_bill", "sync_device", "find_phone",
-    "transactions", "expiration_date", "change_user_name", "user_name", "credit_limit_change",
+    "bill_due", "report_fraud", "damaged_card", "pin_change", "replacement_card_duration",
+    "new_card", "pay_bill", "transactions", "expiration_date", "credit_limit_change",
+    "transfer", "balance", "interest_rate", "routing", "min_payment", "order_checks",
+    "spending_history", "credit_score", "credit_limit", "rewards_balance", "application_status",
+    "international_fees", "apr", "redeem_rewards", "improve_credit_score", "direct_deposit",
+    "payday", "income", "taxes", "w2", "rollover_401k",
+    # proches des comptes ou du matériel
+    "reset_settings", "sync_device", "find_phone", "change_user_name", "user_name",
     # formules de conversation
     "greeting", "goodbye", "thank_you", "yes", "no", "maybe", "repeat", "cancel",
     "what_can_i_ask_you", "are_you_a_bot",

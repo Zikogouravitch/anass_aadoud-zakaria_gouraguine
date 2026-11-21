@@ -15,34 +15,40 @@ from contextlib import asynccontextmanager, suppress
 from dataclasses import asdict
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, Header, HTTPException, Request, status
+from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request, status
 
 from support_agent import __version__
 from support_agent.api.schemas import (
     ChatReponse,
     ChatRequete,
+    MajTicket,
     PredictReponse,
     PredictRequete,
     Sante,
+    TicketCreation,
+    TicketReponse,
 )
 from support_agent.config import get_settings
-from support_agent.conversation import Modele, Moteur
+from support_agent.conversation import Action, Conversation, Etat, Modele, Moteur
 from support_agent.modele import ModeleSupport
 from support_agent.stockage import Conversations
+from support_agent.tickets import Statut, Tickets
 
 
 class Services:
-    """Modèle et conversations, partagés par l'application.
+    """Modèle, conversations et tickets, partagés par l'application.
 
     Le modèle (torch + MiniLM + base encodée) met ~30 s à charger : il est préchargé en
     arrière-plan au démarrage, sinon au premier appel.
     """
 
     def __init__(self, modele: Modele | None = None,
-                 conversations: Conversations | None = None) -> None:
+                 conversations: Conversations | None = None,
+                 tickets: Tickets | None = None) -> None:
         self._modele = modele
         self._verrou = threading.Lock()
         self.conversations = conversations if conversations is not None else Conversations()
+        self.tickets = tickets if tickets is not None else Tickets()
 
     @property
     def modele_charge(self) -> bool:
@@ -67,6 +73,12 @@ class Services:
         with suppress(HTTPException):
             _ = self.modele
 
+    def conversation(self, ident: str) -> Conversation:
+        conv = self.conversations.obtenir(ident)
+        if conv is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "conversation inconnue")
+        return conv
+
 
 def verifier_cle(x_api_key: Annotated[str | None, Header()] = None) -> None:
     attendue = get_settings().api_key
@@ -82,9 +94,9 @@ def services(request: Request) -> Services:
 ServicesDep = Annotated[Services, Depends(services)]
 
 
-def creer_app(modele: Modele | None = None,
-              conversations: Conversations | None = None) -> FastAPI:
-    svc = Services(modele, conversations)
+def creer_app(modele: Modele | None = None, conversations: Conversations | None = None,
+              tickets: Tickets | None = None) -> FastAPI:
+    svc = Services(modele, conversations, tickets)
 
     @asynccontextmanager
     async def cycle_de_vie(_: FastAPI) -> AsyncIterator[None]:
@@ -108,17 +120,53 @@ def creer_app(modele: Modele | None = None,
 
     @app.post("/chat", response_model=ChatReponse, dependencies=protege)
     def chat(req: ChatRequete, s: ServicesDep) -> ChatReponse:
-        """Un tour de conversation : un message libre ou une action (resolu, non_resolu...)."""
-        if req.conversation_id is None:
-            conv = s.conversations.nouvelle()
-        else:
-            trouvee = s.conversations.obtenir(req.conversation_id)
-            if trouvee is None:
-                raise HTTPException(status.HTTP_404_NOT_FOUND, "conversation inconnue")
-            conv = trouvee
-        rep = Moteur(s.modele).repondre(conv, req.message, req.action)
+        """Un tour de conversation : un message libre ou une action (resolu, non_resolu,
+        technicien, confirmer_ticket, annuler)."""
+        conv = (s.conversations.nouvelle() if req.conversation_id is None
+                else s.conversation(req.conversation_id))
+        rep = Moteur(s.modele, s.tickets).repondre(conv, req.message, req.action)
         s.conversations.enregistrer(conv)
         return ChatReponse(**asdict(rep))
+
+    @app.post("/tickets", response_model=TicketReponse, status_code=status.HTTP_201_CREATED,
+              dependencies=protege)
+    def creer_ticket(req: TicketCreation, s: ServicesDep) -> TicketReponse:
+        """Crée le ticket pré-rempli d'une conversation, après confirmation de l'employé.
+
+        Seule une conversation dont l'escalade a été proposée peut produire un ticket ;
+        un second appel renvoie le même ticket (pas de doublon)."""
+        conv = s.conversation(req.conversation_id)
+        if conv.etat not in {Etat.ESCALADE_PROPOSEE, Etat.TICKET_CREE}:
+            raise HTTPException(status.HTTP_409_CONFLICT,
+                                f"aucune escalade proposée dans cette conversation "
+                                f"(état : {conv.etat})")
+        rep = Moteur(s.modele, s.tickets).repondre(conv, action=Action.CONFIRMER)
+        s.conversations.enregistrer(conv)
+        assert rep.ticket is not None
+        return TicketReponse(**rep.ticket)
+
+    @app.get("/tickets/{ident}", response_model=TicketReponse, dependencies=protege)
+    def suivre_ticket(ident: str, s: ServicesDep) -> TicketReponse:
+        """Suivi d'un ticket par son identifiant (INC-00001)."""
+        t = s.tickets.obtenir(ident)
+        if t is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "ticket inconnu")
+        return TicketReponse(**t.en_dict())
+
+    @app.get("/tickets", response_model=list[TicketReponse], dependencies=protege)
+    def lister_tickets(s: ServicesDep, statut: Statut | None = None,
+                       limite: Annotated[int, Query(ge=1, le=1000)] = 100
+                       ) -> list[TicketReponse]:
+        """Tickets pour les techniciens : cas critiques et priorité haute en tête."""
+        return [TicketReponse(**t.en_dict()) for t in s.tickets.lister(statut, limite)]
+
+    @app.patch("/tickets/{ident}", response_model=TicketReponse, dependencies=protege)
+    def maj_ticket(ident: str, req: MajTicket, s: ServicesDep) -> TicketReponse:
+        """Mise à jour par un technicien : statut et note."""
+        t = s.tickets.changer_statut(ident.strip().upper(), req.statut, req.note)
+        if t is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "ticket inconnu")
+        return TicketReponse(**t.en_dict())
 
     return app
 

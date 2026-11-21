@@ -70,10 +70,23 @@ REPONSES: dict[str | None, dict[str, Any]] = {
                                   "critique": True},
                    "tentative": 1, "actions": ["confirmer_ticket", "annuler"],
                    "brouillon_ticket": {"categorie": "reseau", "priorite": "high",
+                                        "groupe": "Network", "delai": "4 hours",
                                         "motif": "demande_utilisateur",
                                         "articles_essayes": ["KB-NET-01"],
                                         "description": "VPN drops"}},
+    "confirmer_ticket": {"conversation_id": "c1", "etat": "ticket_cree",
+                         "message": "Ticket INC-00001 is created for the Network team.",
+                         "prediction": None, "tentative": 1, "actions": [],
+                         "brouillon_ticket": None,
+                         "ticket": {"id": "INC-00001", "groupe": "Network",
+                                    "delai": "4 hours"}},
 }
+
+TICKET = {"id": "INC-00001", "statut": "ouvert", "critique": True, "priorite": "high",
+          "groupe": "Network", "delai": "4 hours", "description": "VPN drops",
+          "categorie": "reseau", "motif": "demande_utilisateur",
+          "articles_essayes": ["KB-NET-01"], "cree_le": "2026-11-20T10:00:00+00:00",
+          "maj_le": "2026-11-20T10:00:00+00:00", "note": "We are on it"}
 
 
 @pytest.fixture
@@ -105,8 +118,38 @@ def test_app_conversation(faux_chat: list[tuple[Any, ...]]) -> None:
     assert at.table[0].value is not None  # brouillon de ticket affiché
     assert ":red[**critical**]" in " ".join(c.value for c in at.caption)
 
+    next(b for b in at.button if b.label == "🎫 Create ticket").click().run()
+    assert faux_chat[2] == (None, "c1", "confirmer_ticket")
+    assert "INC-00001" in at.success[0].value
+    assert at.text_input[0].value == "INC-00001"  # pré-rempli dans le suivi
+
     at.sidebar.button[0].click().run()  # nouvelle conversation
     assert len(at.chat_message) == 0
+
+
+def test_app_suivi_ticket(monkeypatch: pytest.MonkeyPatch) -> None:
+    def ticket(self: ClientAPI, ident: str) -> dict[str, Any]:
+        if ident == "INC-00001":
+            return TICKET
+        raise ErreurAPI("Erreur 404 : ticket inconnu")
+
+    monkeypatch.setattr(ClientAPI, "ticket", ticket)
+    at = AppTest.from_file(APP, default_timeout=30).run()
+    at.button(key="FormSubmitter:suivi-Track").click().run()  # champ vide : rien
+    assert not at.subheader
+    at.text_input[0].set_value("INC-00001")
+    at.button(key="FormSubmitter:suivi-Track").click().run()
+    assert at.subheader[0].value == "INC-00001 · 🟡 Open"
+    assert at.metric[1].value == "Network"
+    assert "We are on it" in at.info[0].value and at.error  # cas critique signalé
+    at.text_input[0].set_value("INC-00404")
+    at.button(key="FormSubmitter:suivi-Track").click().run()
+    assert "ticket inconnu" in at.error[0].value
+
+
+def test_client_ticket() -> None:
+    c = _client(lambda req: httpx.Response(200, json={"id": str(req.url.path)}))
+    assert c.ticket("INC-00001") == {"id": "/tickets/INC-00001"}
 
 
 def test_app_api_injoignable(monkeypatch: pytest.MonkeyPatch) -> None:

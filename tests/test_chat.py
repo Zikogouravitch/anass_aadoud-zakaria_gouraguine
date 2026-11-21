@@ -25,6 +25,7 @@ from support_agent.conversation import (
 from support_agent.data import charger_base
 from support_agent.modele import Hyper, ModeleSupport, Prediction
 from support_agent.stockage import Conversations
+from support_agent.tickets import Tickets
 
 BASE = {a.id: a for a in charger_base()}
 
@@ -82,7 +83,8 @@ def journal(tmp_path: Path) -> Path:
 @pytest.fixture
 def client(bouchon: Bouchon, journal: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
     monkeypatch.setattr("support_agent.api.main.get_settings", lambda: Reglages())
-    return TestClient(creer_app(bouchon, Conversations(journal)))
+    return TestClient(creer_app(bouchon, Conversations(journal),
+                                Tickets(journal.parent / "tickets.jsonl")))
 
 
 def chat(c: TestClient, **corps: Any) -> dict[str, Any]:
@@ -236,7 +238,7 @@ def test_erreurs_de_requete(client: TestClient) -> None:
 
 def test_cle_api(bouchon: Bouchon, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("support_agent.api.main.get_settings", lambda: Reglages("secret"))
-    c = TestClient(creer_app(bouchon, Conversations(None)))
+    c = TestClient(creer_app(bouchon, Conversations(None), Tickets(None)))
     assert c.post("/chat", json={"message": "vpn"}).status_code == 401
     assert c.post("/chat", json={"message": "vpn"},
                   headers={"X-API-Key": "faux"}).status_code == 401
@@ -258,7 +260,7 @@ def test_modele_absent(monkeypatch: pytest.MonkeyPatch) -> None:
         raise FileNotFoundError("models/support.joblib absent : lancer support_agent.train")
 
     monkeypatch.setattr(ModeleSupport, "charger", staticmethod(absent))
-    c = TestClient(creer_app(None, Conversations(None)))
+    c = TestClient(creer_app(None, Conversations(None), Tickets(None)))
     assert c.get("/health").json()["modele_charge"] is False
     r = c.post("/chat", json={"message": "vpn"})
     assert r.status_code == 503 and "support_agent.train" in r.json()["detail"]
@@ -268,7 +270,7 @@ def test_modele_charge_au_premier_appel(monkeypatch: pytest.MonkeyPatch,
                                         bouchon: Bouchon) -> None:
     monkeypatch.setattr(ModeleSupport, "charger", staticmethod(lambda: bouchon))
     monkeypatch.setattr("support_agent.api.main.get_settings", lambda: Reglages())
-    c = TestClient(creer_app(None, Conversations(None)))
+    c = TestClient(creer_app(None, Conversations(None), Tickets(None)))
     assert chat(c, message="My VPN drops")["etat"] == "solution_proposee"
     assert c.get("/health").json()["modele_charge"] is True
     assert bouchon.textes[0].startswith("warm up")  # préchauffage avant le 1er message
@@ -279,7 +281,8 @@ def test_prechargement_au_demarrage(monkeypatch: pytest.MonkeyPatch, bouchon: Bo
 
     monkeypatch.setattr(ModeleSupport, "charger", staticmethod(lambda: bouchon))
     monkeypatch.setattr("support_agent.api.main.get_settings", lambda: Reglages())
-    with TestClient(creer_app(None, Conversations(None))) as c:  # déclenche le démarrage
+    # le bloc « with » déclenche le démarrage (et donc le préchargement)
+    with TestClient(creer_app(None, Conversations(None), Tickets(None))) as c:
         for _ in range(50):
             if c.get("/health").json()["modele_charge"]:
                 break
@@ -292,7 +295,7 @@ def test_prechargement_sans_modele(monkeypatch: pytest.MonkeyPatch) -> None:
         raise FileNotFoundError("absent")
 
     monkeypatch.setattr(ModeleSupport, "charger", staticmethod(absent))
-    with TestClient(creer_app(None, Conversations(None))) as c:
+    with TestClient(creer_app(None, Conversations(None), Tickets(None))) as c:
         assert c.get("/health").json()["status"] == "ok"  # l'API démarre quand même
 
 
@@ -347,6 +350,6 @@ def test_stockage(tmp_path: Path) -> None:
 
 
 def test_chat_avec_vrai_modele(modele: ModeleSupport) -> None:
-    c = TestClient(creer_app(modele, Conversations(None)))
+    c = TestClient(creer_app(modele, Conversations(None), Tickets(None)))
     r = chat(c, message="My VPN keeps disconnecting")
     assert r["prediction"]["categorie"] == "reseau" and r["article"]["id"] == "KB-NET-01"

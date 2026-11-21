@@ -13,7 +13,7 @@ I connect to the guest wifi fine but nothing loads,reseau,KB-NET-07,0,
 vpn not connecting,reseau,KB-NET-01,0,texte court
 The VPN connects but I still can't open the intranet,reseau,KB-NET-08|KB-NET-01,0,vocabulaire partagé
 "It's not my keyboard, it's the network: the shared folders are unreachable",reseau,KB-NET-05|KB-NET-03,0,négation
-My conexion to the wiifi keeps droping,reseau,KB-NET-02,0,faute de frappe
+Teh wireles netwrok is realy unstabel today,reseau,KB-NET-02,0,faute de frappe
 Excel is fine but my internet connection cuts out every ten minutes,reseau,KB-NET-02|KB-NET-06,0,incident mêlé
 The office printer prints only half the page,materiel,KB-HW-01,0,
 The printer says offline although it is switched on,materiel,KB-HW-01,0,
@@ -30,7 +30,7 @@ The space bar and the letter E are stuck,materiel,KB-HW-08|KB-HW-03,0,
 My PC is making a loud clicking noise,materiel,KB-HW-02|KB-HW-06,0,texte vague
 The laptop doesn't charge with the dock,materiel,KB-HW-06,0,
 The printer works but my wireless mouse doesn't,materiel,KB-HW-08,0,négation
-Prnter jamed agian,materiel,KB-HW-01,0,faute de frappe
+The scaner gives me emty pages,materiel,KB-HW-05,0,faute de frappe
 After three wrong tries the login screen says my account is locked,compte_acces,KB-ACC-01,0,
 My password expired while I was on holiday,compte_acces,KB-ACC-02,0,
 I need to reset my password but the link doesn't arrive,compte_acces,KB-ACC-02,0,
@@ -46,7 +46,7 @@ Single sign-on loops back to the login page,compte_acces,KB-ACC-06,0,
 The owner approved my access request but I still can't open the site,compte_acces,KB-ACC-07,0,
 I can't log into anything because my MFA phone was reset,compte_acces,KB-ACC-04,0,
 My screen is fine but I can't log in to my account,compte_acces,KB-ACC-01|KB-ACC-06,0,négation
-Pasword not acepted after the change,compte_acces,KB-ACC-02|KB-ACC-06,0,faute de frappe
+"I cant sing in, my pasword expird",compte_acces,KB-ACC-02,0,faute de frappe
 Our company was charged twice for the annual plan,facturation,KB-BIL-01,0,
 The invoice total doesn't match the quote,facturation,KB-BIL-01,0,
 The payment page says card declined,facturation,KB-BIL-02,0,
@@ -62,7 +62,7 @@ The invoice is missing our PO reference,facturation,KB-BIL-07,0,
 I want to change the card used for automatic payments,facturation,KB-BIL-08,0,
 Billing question about my account,facturation,KB-BIL-01,0,texte vague
 The software works fine but the invoice amount is wrong,facturation,KB-BIL-01,0,négation
-We were chraged two times this month,facturation,KB-BIL-01,0,faute de frappe
+Payement declinned on the renewall page,facturation,KB-BIL-02,0,faute de frappe
 I don't get any emails in Outlook since lunch,logiciel,KB-SW-02,0,
 Excel shows not responding when I filter a big sheet,logiciel,KB-SW-03,0,
 "After the latest patch, SAP GUI closes on launch",logiciel,KB-SW-01,0,
@@ -78,7 +78,7 @@ Chrome crashes when I open the intranet portal,logiciel,KB-SW-01,0,
 I can't install the update for Teams,logiciel,KB-SW-04,0,
 Outlook search shows no results for old emails,logiciel,KB-SW-07,0,
 "The network is fine, it's Excel that freezes",logiciel,KB-SW-03,0,négation
-Ouutlook not reciving mails,logiciel,KB-SW-02,0,faute de frappe
+Teams keps freezng durring meetngs,logiciel,KB-SW-05,0,faute de frappe
 I got a message from IT asking for my password by email but it looks fake,securite,KB-SEC-01,1,
 I entered my credentials on a site that looked like our login page,securite,KB-SEC-01|KB-SEC-07,1,
 My antivirus quarantined a file called invoice.exe,securite,KB-SEC-02,1,
@@ -94,7 +94,7 @@ My mouse moves by itself and windows open on their own,securite,KB-SEC-05|KB-SEC
 I think I have a virus,securite,KB-SEC-02,1,texte vague
 "The printer works, but a strange email asked me to confirm my bank details",securite,KB-SEC-01,1,incident mêlé
 Excel crashed after I opened the attachment and now the antivirus is screaming,securite,KB-SEC-02,1,incident mêlé
-I recieved a fishing email,securite,KB-SEC-01,1,faute de frappe
+Somone loged into my acount from abroad,securite,KB-SEC-03,1,faute de frappe
 The online store is not loading for any customer,panne_service,KB-OUT-08,1,
 Email is down for the whole company,panne_service,KB-OUT-02|KB-OUT-01,1,
 The warehouse management system is unavailable everywhere,panne_service,KB-OUT-03|KB-OUT-06,1,
@@ -110,7 +110,7 @@ No calls are coming in to the support line,panne_service,KB-OUT-07,1,
 The website returns a 502 error for all visitors,panne_service,KB-OUT-08|KB-OUT-01,1,
 The whole floor lost access to every company service,panne_service,KB-OUT-01|KB-NET-03,1,vocabulaire partagé
 "It's not only my PC, the whole department can't use the ERP",panne_service,KB-OUT-03,1,négation
-Evrything is down in the ofice,panne_service,KB-OUT-01,1,faute de frappe
+The ERP is donw for evryone in the compny,panne_service,KB-OUT-03|KB-OUT-06,1,faute de frappe
 What's a good movie to watch tonight?,hors_sujet,,0,
 How long should I boil an egg?,hors_sujet,,0,
 Reserve a table for two at 8pm,hors_sujet,,0,

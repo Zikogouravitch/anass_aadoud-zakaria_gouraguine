@@ -39,6 +39,9 @@ class ClientAPI:
     def sante(self) -> dict[str, Any]:
         return self._appel("GET", "/health")
 
+    def ticket(self, ident: str) -> dict[str, Any]:
+        return self._appel("GET", f"/tickets/{ident}")
+
     def chat(self, message: str | None = None, conversation_id: str | None = None,
              action: str | None = None) -> dict[str, Any]:
         corps = {"message": message, "conversation_id": conversation_id, "action": action}

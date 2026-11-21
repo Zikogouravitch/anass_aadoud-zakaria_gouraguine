@@ -18,6 +18,11 @@ class FauxEncodeur:
 
     dim = 256
 
+    def mots(self) -> frozenset[str]:
+        """Petit dictionnaire anglais (le vrai vient du tokenizer de MiniLM)."""
+        return frozenset({"promised", "ransom", "stole", "tone", "renew", "chop", "stop",
+                          "my", "the", "printer", "offline", "is"})
+
     def encode(self, textes: list[str]) -> np.ndarray:
         sortie = np.zeros((len(textes), self.dim), dtype=np.float32)
         for i, t in enumerate(textes):

@@ -7,6 +7,7 @@ from typing import Any
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 from support_agent.conversation import Action, Etat
+from support_agent.tickets import Statut
 
 TAILLE_MAX = 2000
 
@@ -49,6 +50,7 @@ class PredictReponse(BaseModel):
     critique: bool
     articles: list[Article]
     alternatives: list[dict[str, Any]]
+    raison: str = ""
 
 
 class ChatRequete(BaseModel):
@@ -80,6 +82,37 @@ class ChatReponse(BaseModel):
     tentative: int = 0
     actions: list[str] = []
     brouillon_ticket: dict[str, Any] | None = None
+    ticket: dict[str, Any] | None = None
+
+
+class TicketCreation(BaseModel):
+    """Confirmation de l'employé : crée le ticket pré-rempli de la conversation."""
+
+    conversation_id: str = Field(min_length=1, max_length=64)
+
+
+class TicketReponse(BaseModel):
+    id: str
+    conversation_id: str
+    categorie: str
+    categorie_probable: str | None
+    priorite: str
+    critique: bool
+    groupe: str
+    delai: str
+    motif: str | None
+    description: str
+    articles_essayes: list[str]
+    tentatives: int
+    statut: Statut
+    cree_le: str
+    maj_le: str
+    note: str
+
+
+class MajTicket(BaseModel):
+    statut: Statut
+    note: str = Field(default="", max_length=TAILLE_MAX)
 
 
 class Sante(BaseModel):

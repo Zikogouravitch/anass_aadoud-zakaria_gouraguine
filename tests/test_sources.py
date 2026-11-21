@@ -111,7 +111,8 @@ def test_clinc_charger(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 
 
 def test_textes_evaluation() -> None:
-    assert len(construire.textes_evaluation()) == 246
+    # 246 lignes des CSV + 41 messages des 30 conversations de test
+    assert len(construire.textes_evaluation()) == 287
 
 
 def test_main_construire(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str],

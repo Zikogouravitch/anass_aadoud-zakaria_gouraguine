@@ -1,4 +1,4 @@
-"""Interface de l'agent (onglet Chat).
+"""Interface de l'agent (onglets Chat et Track a ticket).
 
     streamlit run support_agent/ui/app.py     # l'API doit tourner (API_URL dans .env)
 """
@@ -15,9 +15,12 @@ LIBELLES = {
     "resolu": "✅ Solved",
     "non_resolu": "❌ Not solved",
     "technicien": "🧑‍🔧 Talk to a technician",
+    "confirmer_ticket": "🎫 Create ticket",
     "annuler": "Cancel",
 }
 COULEURS_PRIORITE = {"high": "red", "medium": "orange", "low": "green"}
+STATUTS = {"ouvert": "🟡 Open", "en_cours": "🔵 In progress", "resolu": "🟢 Resolved",
+           "ferme": "⚪ Closed"}
 
 
 @st.cache_resource
@@ -47,6 +50,8 @@ def envoyer(message: str | None = None, action: str | None = None) -> None:
     s.conversation_id = rep["conversation_id"]
     s.derniere = rep
     s.tours.append(("assistant", rep["message"]))
+    if rep.get("ticket"):
+        s.dernier_ticket = rep["ticket"]["id"]  # pré-rempli dans l'onglet de suivi
 
 
 def nouvelle_conversation() -> None:
@@ -75,12 +80,15 @@ def onglet_chat() -> None:
         bandeau(rep)
         if rep.get("brouillon_ticket"):
             b = rep["brouillon_ticket"]
-            with st.expander("Pre-filled ticket", expanded=True):
-                st.table({"Field": ["Category", "Priority", "Reason", "Articles tried",
-                                    "Description"],
-                          "Value": [b["categorie"], b["priorite"], b["motif"],
-                                    ", ".join(b["articles_essayes"]) or "—", b["description"]]})
-                st.caption("Ticket creation after your confirmation comes with /tickets (T6).")
+            with st.expander("Pre-filled ticket (created only if you confirm)", expanded=True):
+                st.table({"Field": ["Category", "Team", "Priority", "Response time", "Reason",
+                                    "Articles tried", "Description"],
+                          "Value": [b["categorie"], b["groupe"], b["priorite"], b["delai"],
+                                    b["motif"], ", ".join(b["articles_essayes"]) or "—",
+                                    b["description"]]})
+        if rep.get("ticket"):
+            st.success(f"Ticket **{rep['ticket']['id']}** created · team "
+                       f"{rep['ticket']['groupe']} · response within {rep['ticket']['delai']}")
         colonnes = st.columns(max(1, len(rep.get("actions", []))))
         for col, action in zip(colonnes, rep.get("actions", []), strict=False):
             if action in LIBELLES:
@@ -88,10 +96,38 @@ def onglet_chat() -> None:
                            on_click=envoyer, kwargs={"action": action})
     if s.erreur:
         st.error(s.erreur)
-    message = st.chat_input("Describe your IT problem (in English)")
-    if message:
-        envoyer(message=message)
+    message = st.chat_input("Describe your IT problem (in English)", max_chars=2000)
+    if message and message.strip():  # espaces seuls : ignorés, rien n'est envoyé
+        envoyer(message=" ".join(message.split()))
         st.rerun()
+
+
+def onglet_suivi() -> None:
+    s = _etat()
+    with st.form("suivi"):
+        ident = st.text_input("Ticket number", value=s.get("dernier_ticket", ""),
+                              placeholder="INC-00001")
+        envoye = st.form_submit_button("Track")
+    if not (envoye and ident.strip()):
+        return
+    try:
+        t = client().ticket(ident.strip())
+    except ErreurAPI as e:
+        st.error(str(e))
+        return
+    st.subheader(f"{t['id']} · {STATUTS.get(t['statut'], t['statut'])}")
+    if t["critique"]:
+        st.error("Critical incident: handled first.")
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Priority", t["priorite"])
+    col2.metric("Team", t["groupe"])
+    col3.metric("Response time", t["delai"])
+    st.write(f"**Description** : {t['description']}")
+    st.caption(f"Category {t['categorie']} · reason {t['motif']} · articles tried: "
+               f"{', '.join(t['articles_essayes']) or '—'} · created {t['cree_le']} · "
+               f"updated {t['maj_le']}")
+    if t["note"]:
+        st.info(f"Technician note: {t['note']}")
 
 
 def main() -> None:
@@ -100,9 +136,11 @@ def main() -> None:
     st.sidebar.button("New conversation", on_click=nouvelle_conversation)
     st.sidebar.caption("Level-1 IT support. Answers come from validated knowledge-base "
                        "articles; critical cases go straight to a technician.")
-    (chat,) = st.tabs(["Chat"])
+    chat, suivi = st.tabs(["Chat", "Track a ticket"])
     with chat:
         onglet_chat()
+    with suivi:
+        onglet_suivi()
 
 
 main()

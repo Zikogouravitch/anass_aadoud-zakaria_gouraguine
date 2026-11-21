@@ -240,6 +240,8 @@ def test_minilm_enveloppe(monkeypatch: pytest.MonkeyPatch) -> None:
     class FauxST:
         def __init__(self, nom: str, device: str) -> None:
             self.nom, self.max_seq_length = nom, 512
+            self.tokenizer = type("T", (), {"get_vocab": staticmethod(
+                lambda: {"printer": 1, "##ing": 2, "[CLS]": 3, "café": 4})})()
 
         def encode(self, textes: list[str], **kw: Any) -> list[list[float]]:
             return [[1.0, 0.0] for _ in textes]
@@ -250,4 +252,6 @@ def test_minilm_enveloppe(monkeypatch: pytest.MonkeyPatch) -> None:
     module_encodeur.charger_encodeur.cache_clear()
     enc = module_encodeur.charger_encodeur("faux")
     assert enc.encode(["a", "b"]).shape == (2, 2)
+    assert isinstance(enc, module_encodeur.MiniLM)
+    assert enc.mots() == frozenset({"printer"})  # mots entiers ASCII seulement
     module_encodeur.charger_encodeur.cache_clear()

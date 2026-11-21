@@ -1,0 +1,116 @@
+[
+  {"id": "C01", "role": "2 échecs puis ticket", "tours": [
+    {"message": "My VPN connection fails every time I try from my home office"},
+    {"action": "non_resolu"}, {"action": "non_resolu"}, {"action": "confirmer_ticket"}],
+   "attendu": {"ticket": true, "categorie": "reseau", "motif": "non_resolu_apres_essais"}},
+  {"id": "C02", "role": "2 échecs puis ticket", "tours": [
+    {"message": "The printer near reception only prints half of each page"},
+    {"message": "no, same problem"}, {"message": "still not printing correctly"},
+    {"action": "confirmer_ticket"}],
+   "attendu": {"ticket": true, "categorie": "materiel", "motif": "non_resolu_apres_essais"}},
+  {"id": "C03", "role": "2 échecs puis ticket", "tours": [
+    {"message": "Outlook shows disconnected and no new mail arrives in my inbox"},
+    {"action": "non_resolu"}, {"action": "non_resolu"}, {"action": "confirmer_ticket"}],
+   "attendu": {"ticket": true, "categorie": "logiciel", "motif": "non_resolu_apres_essais"}},
+  {"id": "C04", "role": "cas critique", "tours": [
+    {"message": "I opened an attachment from an unknown sender and typed my login on the page it opened"},
+    {"action": "confirmer_ticket"}],
+   "attendu": {"ticket": true, "categorie": "securite", "motif": "cas_critique"}},
+  {"id": "C05", "role": "cas critique", "tours": [
+    {"message": "The email server is unavailable for the whole office since 9am"},
+    {"action": "confirmer_ticket"}],
+   "attendu": {"ticket": true, "categorie": "panne_service", "motif": "cas_critique"}},
+  {"id": "C06", "role": "cas critique", "tours": [
+    {"message": "My work laptop was stolen from my bag at the airport"},
+    {"action": "confirmer_ticket"}],
+   "attendu": {"ticket": true, "categorie": "securite", "motif": "cas_critique"}},
+  {"id": "C07", "role": "demande de technicien", "tours": [
+    {"message": "My monitor shows strange colors and blurry text"},
+    {"message": "I would prefer a technician to come and check it"},
+    {"action": "confirmer_ticket"}],
+   "attendu": {"ticket": true, "categorie": "materiel", "motif": "demande_utilisateur"}},
+  {"id": "C08", "role": "article « always »", "tours": [
+    {"message": "Please create a user account for the new trainee who starts on Monday"},
+    {"action": "confirmer_ticket"}],
+   "attendu": {"ticket": true, "categorie": "compte_acces", "motif": "article_exige_technicien"}},
+  {"id": "C09", "role": "article « always »", "tours": [
+    {"message": "We are billed for 10 more licences than the number of people using the software"},
+    {"action": "confirmer_ticket"}],
+   "attendu": {"ticket": true, "categorie": "facturation", "motif": "article_exige_technicien"}},
+  {"id": "C10", "role": "indéterminé après précision", "tours": [
+    {"message": "It does not work"}, {"message": "still broken, please help"},
+    {"action": "confirmer_ticket"}],
+   "attendu": {"ticket": true, "categorie": "INDETERMINE", "motif": "categorie_indeterminee"}},
+
+  {"id": "C11", "role": "résolu à l'essai 1", "tours": [
+    {"message": "The Wi-Fi in my office keeps dropping"}, {"action": "resolu"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C12", "role": "résolu à l'essai 1", "tours": [
+    {"message": "Excel freezes when I open a large spreadsheet"}, {"message": "It works now, thanks"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C13", "role": "résolu à l'essai 1", "tours": [
+    {"message": "My account is locked after I typed the wrong password several times"},
+    {"action": "resolu"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C14", "role": "résolu à l'essai 1", "tours": [
+    {"message": "OneDrive is not syncing my files anymore"}, {"action": "resolu"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C15", "role": "résolu à l'essai 1", "tours": [
+    {"message": "Windows Update has been stuck at 30 percent since yesterday"},
+    {"message": "yes, solved"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C16", "role": "résolu à l'essai 1", "tours": [
+    {"message": "My headset microphone is not detected on my laptop"}, {"action": "resolu"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C17", "role": "résolu à l'essai 1", "tours": [
+    {"message": "The touchpad on my laptop stopped responding"}, {"action": "resolu"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C18", "role": "résolu à l'essai 1", "tours": [
+    {"message": "My mapped network drive shows disconnected"}, {"action": "resolu"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C19", "role": "résolu à l'essai 2", "tours": [
+    {"message": "Internet is very slow during my video calls at home"},
+    {"action": "non_resolu"}, {"action": "resolu"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C20", "role": "résolu à l'essai 2", "tours": [
+    {"message": "My second monitor stays black when I connect it"},
+    {"message": "no"}, {"message": "great, that fixed it"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C21", "role": "résolu à l'essai 2", "tours": [
+    {"message": "Outlook keeps asking for my password every few minutes"},
+    {"action": "non_resolu"}, {"action": "resolu"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C22", "role": "résolu à l'essai 2", "tours": [
+    {"message": "The scanner sends me empty pages"},
+    {"action": "non_resolu"}, {"action": "resolu"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C23", "role": "hors sujet", "tours": [
+    {"message": "What's the weather in London tomorrow?"}],
+   "attendu": {"ticket": false, "etat": "hors_sujet"}},
+  {"id": "C24", "role": "hors sujet", "tours": [
+    {"message": "Can you recommend a good restaurant for lunch?"}],
+   "attendu": {"ticket": false, "etat": "hors_sujet"}},
+  {"id": "C25", "role": "hors sujet", "tours": [
+    {"message": "How many days are left until Christmas?"}],
+   "attendu": {"ticket": false, "etat": "hors_sujet"}},
+  {"id": "C26", "role": "précision puis résolu", "tours": [
+    {"message": "It does not work"}, {"message": "my Wi-Fi keeps dropping every few minutes"},
+    {"action": "resolu"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C27", "role": "précision puis résolu", "tours": [
+    {"message": "Something is wrong"}, {"message": "Excel crashes when I save my file"},
+    {"action": "resolu"}],
+   "attendu": {"ticket": false, "etat": "resolue"}},
+  {"id": "C28", "role": "escalade refusée", "tours": [
+    {"message": "The VPN won't connect from the hotel"},
+    {"action": "non_resolu"}, {"action": "non_resolu"}, {"action": "annuler"}],
+   "attendu": {"ticket": false, "etat": "fermee"}},
+  {"id": "C29", "role": "escalade refusée", "tours": [
+    {"message": "The printer says offline although it is on"},
+    {"action": "non_resolu"}, {"action": "non_resolu"}, {"message": "no thanks"}],
+   "attendu": {"ticket": false, "etat": "fermee"}},
+  {"id": "C30", "role": "technicien puis annulé", "tours": [
+    {"message": "Some keys on my keyboard type the wrong letters"},
+    {"action": "technicien"}, {"action": "annuler"}],
+   "attendu": {"ticket": false, "etat": "fermee"}}
+]

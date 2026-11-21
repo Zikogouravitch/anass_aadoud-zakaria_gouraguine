@@ -62,9 +62,13 @@ def retirer_fuites(df: pd.DataFrame, textes_eval: Iterable[str]) -> tuple[pd.Dat
 
 
 def textes_evaluation() -> list[str]:
+    """Textes des jeux d'évaluation (CSV) et messages des conversations de test (JSON)."""
     textes: list[str] = []
     for f in sorted(EVAL.glob("*.csv")):
         textes += pd.read_csv(f)["text"].astype(str).tolist()
+    for f in sorted(EVAL.glob("*.json")):
+        for scenario in json.loads(f.read_text(encoding="utf-8")):
+            textes += [t["message"] for t in scenario["tours"] if "message" in t]
     return textes
 
 

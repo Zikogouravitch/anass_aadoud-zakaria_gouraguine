@@ -52,3 +52,11 @@ flowchart LR
 Le seuil passe de 0,60 à 0,50 : à 0,60, l'agent s'abstient deux fois plus souvent, pour une exactitude identique.
 
 Le jeu indépendant (`jeu_independant.csv`) n'a jamais servi à ces choix : il est réservé à la mesure finale (T12).
+
+## Saisies inhabituelles (ajouté en T6)
+
+| Étape | Règle |
+| --- | --- |
+| Correction des fautes | un mot **absent du dictionnaire** (mots entiers du tokenizer MiniLM, ~21 700) et du vocabulaire appris, de 4 lettres ou plus, est remplacé par le mot le plus proche parmi les 6 000 mots les plus fréquents du vocabulaire appris (difflib, ressemblance ≥ 0,8) : « printr brokn » → « printer broken ». Un mot correct (« ransom », « stole ») n'est jamais modifié ; si sa forme de base existe (« renewing »), la correction doit commencer par cette base. Le texte corrigé est renvoyé dans `texte_corrige`. |
+| Charabia | aucun mot du vocabulaire appris et prédiction `hors_sujet` → `INDETERMINE`, raison `incomprehensible` : l'agent demande de reformuler. |
+| Champ `raison` | pourquoi l'agent s'abstient : `vague`, `incomprehensible`, `confiance_faible`, `hors_sujet_douteux`. |

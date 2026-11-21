@@ -72,11 +72,46 @@ streamlit run support_agent/ui/app.py             # interface : http://localhost
 | --- | --- |
 | `GET /health` | État de l'API et du modèle (toujours ouverte) |
 | `POST /predict` | Classement seul d'un message : catégorie, priorité, articles |
-| `POST /chat` | Un tour de conversation : `{"message": "..."}` puis `{"conversation_id": "...", "action": "resolu" \| "non_resolu" \| "technicien" \| "annuler"}` ou une réponse libre |
+| `POST /chat` | Un tour de conversation : `{"message": "..."}` puis `{"conversation_id": "...", "action": "resolu" \| "non_resolu" \| "technicien" \| "confirmer_ticket" \| "annuler"}` ou une réponse libre |
+| `POST /tickets` | Crée le ticket pré-rempli d'une conversation après confirmation : `{"conversation_id": "..."}` → `INC-00001` |
+| `GET /tickets/{id}` | Suivi d'un ticket |
+| `GET /tickets?statut=ouvert` | Liste pour les techniciens, cas critiques en tête |
+| `PATCH /tickets/{id}` | Mise à jour par un technicien : `{"statut": "en_cours" \| "resolu" \| "ferme", "note": "..."}` |
 
 Si `API_KEY` est rempli dans `.env`, chaque appel (sauf `/health`) doit envoyer l'en-tête `X-API-Key`.
 
-Parcours d'une conversation : solution citée (essai 1) → article suivant (essai 2) → ticket pré-rempli proposé. Un cas critique est escaladé tout de suite ; un message vague reçoit une question de précision ; un hors sujet est refusé poliment.
+Parcours d'une conversation : solution citée (essai 1) → article suivant (essai 2) → ticket pré-rempli proposé → créé après confirmation → identifiant affiché et suivi dans l'onglet « Track a ticket ». Un cas critique est escaladé tout de suite ; un message vague reçoit une question de précision ; un hors sujet est refusé poliment.
+
+## Règles d'escalade
+
+| Règle | Déclencheur | Motif du ticket |
+| --- | --- | --- |
+| R1 | Sécurité, panne de service, ou beaucoup de personnes touchées : escalade dès le 1er message | `cas_critique` |
+| R2 | L'article dit qu'un technicien est **toujours** nécessaire (compte, remboursement…) | `article_exige_technicien` |
+| R3 | 2 solutions essayées sans succès | `non_resolu_apres_essais` |
+| R4 | L'employé demande un technicien | `demande_utilisateur` |
+| R5 | Catégorie incertaine après la question de précision | `categorie_indeterminee` |
+
+| Catégorie | Groupe qui reçoit le ticket |
+| --- | --- |
+| `securite` | Security team |
+| `panne_service` | Operations |
+| `compte_acces` | Identity & access |
+| `facturation` | Billing |
+| `reseau` | Network |
+| `materiel` | Hardware & workplace |
+| `logiciel` | Applications |
+| indéterminée | Service desk N1 (triage) |
+
+| Priorité | Délai annoncé |
+| --- | --- |
+| high (toujours pour un cas critique) | 4 hours |
+| medium | 1 business day |
+| low | 3 business days |
+
+```powershell
+python -m support_agent.bilan_tickets   # rejoue les 30 conversations de data/eval/conversations.json
+```
 
 ## Structure
 
@@ -84,8 +119,9 @@ Parcours d'une conversation : solution citée (essai 1) → article suivant (ess
 | --- | --- |
 | `support_agent/` | Cœur : configuration, données, modèle, base de connaissances, escalade |
 | `support_agent/datasets/` | Téléchargement, étiquetage et fusion des sources (Tobi-Bueck, Super User, CLINC150) |
-| `support_agent/api/` | API FastAPI (`/health`, `/predict`, `/chat`) |
-| `support_agent/ui/` | Interface Streamlit (onglet Chat) et client HTTP |
+| `support_agent/api/` | API FastAPI (`/health`, `/predict`, `/chat`, `/tickets`) |
+| `support_agent/escalade.py`, `tickets.py` | Règles d'escalade, tickets (création, suivi) |
+| `support_agent/ui/` | Interface Streamlit (onglets Chat et Track a ticket) et client HTTP |
 | `data/sample/` | Jeu d'essai versionné (100 tickets, 57 articles, 20 cas du jeu d'or) |
 | `data/eval/` | Jeux d'évaluation écrits à la main : validation (120) et indépendant (126) |
 | `tests/` | Tests pytest |
